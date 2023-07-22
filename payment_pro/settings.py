@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     
     # custom apps
     'core',
-    'userauth'
+    'userauth',
+    'account'
 ]
 
 SITE_ID = 1

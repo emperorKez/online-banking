@@ -12,6 +12,15 @@
 </head>
 <body>
 <h1>Homepage</h1>
+
+{% if request.user.is_authenticated %}
+   <h4>Hello {{ request.user.username|title }}</h4>
+   <a href="{% url 'userauth:logout' %}">Logout</a> 
+{% else %}
+   <a href="{% url 'userauth:login' %}">Login</a>
+   <a href="{% url 'userauth:signup' %}">Signup</a>
+{% endif %}  
+    
 <p>welcome to my homepage</p>
 </body>
 </html>

@@ -1,40 +1,65 @@
 from django.shortcuts import render, redirect
-from userauth.forms import UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+from userauth.forms import UserRegisterForm
+from userauth.models import User
+
 
 def Registerview(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
+            username = form.cleaned_data.get("username")
             # username = request.POST.get('username')
-            messages.success(request, f'Hey {username} , your account was created successfully')
-            new_user = authenticate(username = form.cleaned_data['email'], password= form.cleaned_data['password1'])
+            messages.success(
+                request, f"Hey {username} , your account was created successfully"
+            )
+            new_user = authenticate(
+                username=form.cleaned_data["email"],
+                password=form.cleaned_data["password1"],
+            )
             # new_user = authenticate(username = form.cleaned_data.get('email'))
-            
+
             login(request, new_user)
-            return redirect('core:index')
-        
+            return redirect("core:index")
+
     if request.user.is_authenticated:
-        messages.warning(request, ' you are already logged in')
-        return redirect('core:index')
-    
+        messages.warning(request, " you are already logged in")
+        return redirect("core:index")
+
     else:
         form = UserRegisterForm()
-            
-    context = {
-        'signup_form': form
-    }
-    return render(request, 'userauth/sign-up.html', context)
 
-# def LoginView(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
+    context = {"signup_form": form}
+    return render(request, "userauth/signup.html", context)
+
+
+def LoginView(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        try:
+            user = User.objects.get(email=email)
+            user = authenticate(request, email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, "You are logged in")
+                return redirect("core:index")
+            else:
+                messages.warning(request, "Email or password is incorrect")
+                return redirect("userauth:signin")
+        except:
+            messages.warning(request, "User does not exist")
+            return redirect("userauth:signup")
+
+    return render(request, "userauth/login.html")
+
 
 def LogoutView(request):
-    logout(request.user)
-    messages.success(request, 'You have successfully logged out')
-    return redirect('userauth:sign-in')
+    logout(request)
+    messages.success(request, "You have successfully logged out")
+    return redirect("userauth:login")

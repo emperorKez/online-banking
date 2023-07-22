@@ -100,8 +100,8 @@
                                 </li>
                             </ul>
                             <div class="right-area header-action d-flex align-items-center max-un">
-                                <a href="user/login.html" class="login">Login</a>
-                                <a href="user/sign-up" class="cmn-btn">Sign Up
+                                <a href="{% url 'userauth:login' %}" class="login">Login</a>
+                                <a href="{% url 'userauth:signup' %}" class="cmn-btn">Sign Up
                                     <i class="icon-d-right-arrow-2"></i>
                                 </a>
                             </div>
