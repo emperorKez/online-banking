@@ -11,8 +11,8 @@ class AccounAdmin(admin.ModelAdmin):
     list_filter = ['account_status']
     
 class KYCAdmin(admin.ModelAdmin):
-    search_fields = ['full_name']
-    list_display = ['user', 'full_name']
+    search_fields = ['firstname', 'lastname']
+    list_display = ['user', 'firstname', 'lastname']
     
 admin.site.register(Account, AccounAdmin)
 admin.site.register(KYC, KYCAdmin)

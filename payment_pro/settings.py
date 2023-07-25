@@ -173,4 +173,6 @@ JAZZMIN_SETTINGS = {
  
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
     #"order_with_respect_to": ["auth", "books", "books.author", "books.book"],
+    
+    "show_ui_builder": True
 }

@@ -7,17 +7,17 @@ from userauth.models import User
 
 ACCOUNT_STATUS = (('active', 'active'), ('inactive', 'inactive'))
 
-MARITAL_STATUS = (('single', 'single'), ('married', 'married'), ('other', 'other'))
+MARITAL_STATUS = ((None, ''),('single', 'Single'), ('married', 'Married'), ('other', 'Other'))
 
-GENDER = (('male', 'male'), ('female', 'female'), ('other', 'other'))
+GENDER = ((None, ''),('male', 'Male'), ('female', 'Female'), ('other', 'Other'))
 
-NATIONALITY = (
+NATIONALITY = ((None, ''),
     ('NG', 'Nigeria'),
     ('GH', 'Ghana'),  
     ('US', 'United States of America')
 )
 
-IDENTITY_TYPE =(
+IDENTITY_TYPE =((None, ''),
     ('national_id', 'National ID Card'),
     ('drivers_licence', 'Drivers Licence'),
     ('international_passport', 'International Passport')
@@ -46,18 +46,22 @@ class Account(models.Model):
 class KYC(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, default=uuid4,editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=100)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, blank=True, null=True)
+    firstname = models.CharField(max_length=100, blank=False, null=False,)
+    lastname = models.CharField(max_length=100, blank=False, null=False,)
+    image = models.ImageField(upload_to='kyc', default='default.jpg', editable=True, error_messages={'required': 'Required'})
     identity_image = models.ImageField(upload_to='kyc', default='default.jpg')
-    gender = models.CharField(max_length=15, choices=GENDER)
-    marital_status = models.CharField(max_length=15, choices=MARITAL_STATUS)
-    dob = models.DateField(auto_now_add=False)
-    identity_type = models.CharField(max_length=100, choices=IDENTITY_TYPE)
+    gender = models.CharField(max_length=15, choices=GENDER, blank=False, null=False, default='', error_messages={'required': 'Required'})
+    marital_status = models.CharField(max_length=15, choices=MARITAL_STATUS, default='', error_messages={'required': 'Required'})
+    dob = models.DateField(auto_now_add=False, blank=False, null=False)
+    identity_type = models.CharField(max_length=100, choices=IDENTITY_TYPE, default='')
     signature = models.ImageField(upload_to='kyc', blank=True)
     
     # contact detail
-    country = models.CharField(max_length=100, choices=NATIONALITY)
-    city = models.CharField(max_length=100)
-    address = models.CharField(max_length=150)
+    country = models.CharField(max_length=100, choices=NATIONALITY, default='ng')
+    city = models.CharField(max_length=100, blank=False, null=False,)
+    street = models.CharField(max_length=150, blank=False, null=False,)
+    state = models.CharField(max_length=150, blank=False, null=False,)
     mobile_phone = models.CharField(max_length=20)
     
     def __str__(self):
