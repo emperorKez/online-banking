@@ -4,7 +4,9 @@ from userauth import views
 app_name = 'userauth'
 
 urlpatterns = [
-    path('signup/', views.Registerview, name='signup'),
-    path('login/', views.LoginView, name='login'),
-    path('logout/', views.LogoutView, name='logout')
+    path('signup/', views.register, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('delete/', views.delete_account, name='delete')
 ]
+ 

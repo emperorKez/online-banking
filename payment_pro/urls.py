@@ -27,9 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('user/', include('userauth.urls'), name='user'),
-    path('account/', include('account.urls'), name='Account'),
-    
-    path('contact/', homeview.contact, name='contact Page')
+    path('account/', include('account.urls'), name='Account')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # if settings.DEBUG:

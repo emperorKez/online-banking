@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 
 from userauth.models import User
 
-ACCOUNT_STATUS = (('active', 'active'), ('inactive', 'inactive'))
+ACCOUNT_STATUS = (('active', 'Active'), ('inactive', 'Inactive'), ('pending', 'Pending'))
 
 MARITAL_STATUS = ((None, ''),('single', 'Single'), ('married', 'Married'), ('other', 'Other'))
 

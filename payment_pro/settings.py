@@ -142,6 +142,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'userauth.User'
 
+LOGIN_URL = 'userauth:login'
+LOGIN_REDIRECT_URL = 'userauth:login'
+LOGOUT_REDIRECT_URL = 'userauth:login'
+
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

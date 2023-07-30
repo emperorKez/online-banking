@@ -6,7 +6,7 @@ from userauth.forms import UserRegisterForm
 from userauth.models import User
 
 
-def Registerview(request):
+def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -23,11 +23,11 @@ def Registerview(request):
             # new_user = authenticate(username = form.cleaned_data.get('email'))
 
             login(request, new_user)
-            return redirect("core:index")
+            return redirect("account:account")
 
     if request.user.is_authenticated:
         messages.warning(request, " you are already logged in")
-        return redirect("core:index")
+        return redirect("account:account")
 
     else:
         form = UserRegisterForm()
@@ -36,7 +36,7 @@ def Registerview(request):
     return render(request, "userauth/signup.html", context)
 
 
-def LoginView(request):
+def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -48,7 +48,7 @@ def LoginView(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "You are logged in")
-                return redirect("core:index")
+                return redirect("account:account")
             else:
                 messages.warning(request, "Email or password is incorrect")
                 return redirect("userauth:signin")
@@ -59,7 +59,11 @@ def LoginView(request):
     return render(request, "userauth/login.html")
 
 
-def LogoutView(request):
+def logout_view(request):
     logout(request)
     messages.success(request, "You have successfully logged out")
-    return redirect("userauth:login")
+    return redirect("core:index")
+
+def delete_account(request):
+    messages.success(request, 'You have successfully deleted your account')
+    return redirect('core:index')

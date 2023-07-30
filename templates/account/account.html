@@ -12,48 +12,66 @@
                             <div class="owner-details">
                                 <div class="profile-area">
                                     <div class="profile-img">
-                                        <img src="{% static 'dashboard/assets/images/owner-profile.png' %}" alt="image">
+                                        
+                                        {% if kyc %}
+                                        <img src="{{ kyc.image.url }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover" alt="image">
+                                        {% else %}
+                                        <h6>No Profile image</h6>    
+                                        {% endif %}
+                                            
                                     </div>
                                     <div class="name-area">
-                                        <h6>Alfred Davis</h6>
-                                        <p class="active-status">Active</p>
+                                        {% if kyc %}
+                                        <h6>{{ kyc.firstname | title}} {{kyc.lastname | title}}</h6>
+                                        {% else %}
+                                        <h6>John Doe</h6>
+                                        {% endif%}
+                                        
+                                        {% if account.account_status == 'inactive' %}
+                                        <p class="active-status text-danger">{{ account.account_status |title }}</p>
+                                        {% elif account.account_status == 'pending' %}
+                                        <p class="active-status text-warning">{{ account.account_status |title }}</p>
+                                        {% else %} 
+                                        <p class="active-status">{{ account.account_status |title }}</p>
+                                        {% endif %}                                            
                                     </div>
                                 </div>
                                 <div class="owner-info">
                                     <ul>
                                         <li>
-                                            <p>Account ID:</p>
-                                            <span class="mdr">Rex49484</span>
+                                            <p>Account Number:</p>
+                                            <span class="mdr">{{ account.account_number}}</span>
                                         </li>
                                         <li>
                                             <p>Joined:</p>
-                                            <span class="mdr">Aug 25,2021</span>
+                                            <span class="mdr">{{ account.date_created|date:'d M, Y' }}</span>
                                         </li>
                                         <li>
-                                            <p>Confirm status:</p>
-                                            <span class="mdr">80%</span>
+                                            <p>Pin Nummber:</p>
+                                            <span class="mdr">{{ account.pin_number }}</span>
                                         </li>
-                                    </ul>
+                                    </ul> 
                                 </div>
                                 <div class="owner-action">
-                                    <a href="javascript:void(0)">
+                                    <a href="{% url 'userauth:logout' %}">
                                         <img src="{% static 'dashboard/assets/images/icon/logout.png' %}" alt="image">
                                         Logout
                                     </a>
-                                    <a href="javascript:void(0)" class="delete">
+                                    <a href="{% url 'userauth:delete' %}" class="delete">
                                         <img src="{% static 'dashboard/assets/images/icon/delete-2.png' %}" alt="image">
                                         Delete Account
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-xxl-9 col-xl-8">
                             <div class="tab-main">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link active" id="account-tab" data-bs-toggle="tab"
                                             data-bs-target="#account" type="button" role="tab" aria-controls="account"
-                                            aria-selected="true">Account</button>
+                                            aria-selected="true">KYC Detail</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="security-tab" data-bs-toggle="tab"
@@ -71,113 +89,119 @@
                                             aria-controls="notification" aria-selected="false">Notification</button>
                                     </li>
                                 </ul>
+
                                 <div class="tab-content mt-40">
+                                    <!-- account kyc start-->
                                     <div class="tab-pane fade show active" id="account" role="tabpanel"
                                         aria-labelledby="account-tab">
-                                        <div class="upload-avatar">
-                                            <div class="avatar-left d-flex align-items-center">
-                                                <div class="profile-img">
-                                                    <img src="{% static 'dashboard/assets/images/owner-profile-2.png' %}" alt="image">
+                                        <form method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="upload-avatar">
+                                                    <div class="col-6">
+                                                        <img src="{{ kyc.image.url }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover" alt="image">
                                                 </div>
-                                                <div class="instraction">
-                                                    <h6>Your Avatar</h6>
-                                                    <p>Profile picture size: 400px x 400px</p>
-                                                </div>
-                                            </div>
-                                            <div class="avatar-right">
-                                                <div class="file-upload">
-                                                    <div class="right-area">
-                                                        <label class="file">
-                                                            <input type="file">
-                                                            <span class="file-custom"></span>
-                                                        </label>
-                                                    </div>
+                                                <div class="col-6">
+                                                    {{ form.image }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <form action="#">
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-6">
-                                                    <div class="single-input">
-                                                        <label for="fName">First Name</label>
-                                                        <input type="text" id="fName" placeholder="Alfred">
+                                            
+                                                <div class="row justify-content-center">
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="fName">First Name</label>
+                                                            {{ form.firstname }}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="single-input">
-                                                        <label for="lName">Last Name</label>
-                                                        <input type="text" id="lName" placeholder="Davis">
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="lName">Last Name</label>
+                                                            {{ form.lastname|title }}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="single-input">
-                                                        <label for="email">Email</label>
-                                                        <div class="row input-status d-flex align-items-center">
-                                                            <div class="col-6">
-                                                                <input type="text" id="email" placeholder="alfred6598@gmail.com">
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <span class="pending">
-                                                                    <img src="{% static 'dashboard/assets/images/icon/pending.png' %}" alt="icon">
-                                                                    E-mail confirmation in pending
-                                                                </span>
-                                                            </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="lName">Email</label>
+                                                            <span>{{ account.user.email }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="lName">Mobile Phone</label>
+                                                            {{ form.mobile_phone }}
+                                                        </div>
+                                                    </div>
+                                                        <div class=" col-4 single-input" style="display: inline-grid">
+                                                            <label for="dob">Date of Birth</label>
+                                                            {{ form.dob }}
+                                                        </div>
+                                                        <div class=" col-4 single-input" style="display: inline-grid">
+                                                            <label for="gender">Gender</label>
+                                                            {{ form.gender }}
+                                                        </div>
+                                                        <div class="col-4 single-input" style="display: inline-grid">
+                                                            <label for="marital_status">Marital Status</label>
+                                                            {{ form.marital_status }}
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                        <div class="single-input">
+                                                            <label for="lName">Street</label>
+                                                            {{ form.street }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="lName">City</label>
+                                                            {{ form.city }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input">
+                                                            <label for="lName">State</label>
+                                                            {{ form.state }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input" style="display: grid">
+                                                            <label for="lName">Country</label>
+                                                            {{ form.country }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input" style="display: grid">
+                                                            <label for="lName">Identity Type</label>
+                                                            {{ form.identity_type }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input" style="display: inline-grid;">
+                                                            <label for="lName">Upload ID</label>
+                                                            {{ form.identity_image }}
+                                                            {% if kyc.identity_image %}
+                                                                <img src="{{ kyc.identity_image.url }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 10px" alt="">
+                                                            {% endif %}
+                                                                
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="single-input" style="display: inline-grid;">
+                                                            <label for="lName">Upload Signature</label>
+                                                            {{ form.signature }}
+                                                            {% if kyc.signature %}
+                                                                <img src="{{ kyc.signature.url }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 10px" alt="">
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="btn-border">
+                                                            <button class="cmn-btn" type="submit">Update</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <div class="single-input">
-                                                        <label for="phone">Phone</label>
-                                                        <div class="row input-status d-flex align-items-center">
-                                                            <div class="col-6">
-                                                                <input type="text" id="phone" placeholder="(316) 555-0116">
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <span class="confirm">
-                                                                    <img src="{% static 'dashboard/assets/images/icon/confirm.png' %}" alt="icon">
-                                                                    Phone number confirm
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="single-input file">
-                                                        <label>ID Confirmation documents</label>
-                                                        <div class="row input-status d-flex align-items-center">
-                                                            <div class="col-6">
-                                                                <div class="file-upload">
-                                                                    <div class="right-area">
-                                                                        <label class="file">
-                                                                            <input type="file">
-                                                                            <span class="file-custom"></span>
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <span class="notconfirm">
-                                                                    <img src="{% static 'dashboard/assets/images/icon/not-confirm.png' %}" alt="icon">
-                                                                    Person not confirmed
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="single-input">
-                                                        <label for="address">Address</label>
-                                                        <input type="text" id="address" placeholder="2972 Westheimer Rd. Santa Ana, Illinois 85486">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="btn-border">
-                                                        <button class="cmn-btn">Account</button>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </form>
                                     </div>
+                                    <!-- account kyc end -->
+
+
                                     <div class="tab-pane fade" id="security" role="tabpanel"
                                         aria-labelledby="security-tab">
                                         <div class="single-content authentication d-flex align-items-center justify-content-between">
