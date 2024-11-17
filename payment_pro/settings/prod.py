@@ -6,12 +6,15 @@ import os
 DEBUG = False
 
 # Replace the SQLite DATABASES configuration with PostgreSQL:
-DATABASES = dj_database_url.config(
+DATABASES = {
+    'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
         # default='postgresql://postgres:postgres@localhost:5432/mysite',
         dafault='postgresql://fintech_app_user:EY6zLm8B1QhfqIDFrQtfnDFWOR8FMrlV@dpg-cst66brtq21c73a7rptg-a/fintech_app',
-        conn_max_age=600
-)
+        conn_max_age=600,
+        conn_health_checks=True,
+        )
+}
 
 
 MIDDLEWARE = [
