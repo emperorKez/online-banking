@@ -5,7 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 from account.models import KYC
 
-class DateInput(DateInput):
+class DateInput(DateInput): 
     input_type = 'date'
     
 class KYCForm(forms.ModelForm):
