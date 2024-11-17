@@ -1,6 +1,6 @@
 from .base import *
 import dj_database_url
-from pathlib import Path
+from pathlib import Path 
 import os
 
 DEBUG = False
