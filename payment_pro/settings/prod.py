@@ -2,6 +2,7 @@
 import dj_database_url
 from pathlib import Path
 import os
+from .base import *
 
 # Define the base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 # Set the static URL
 STATIC_URL = '/static/'
