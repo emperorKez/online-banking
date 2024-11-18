@@ -51,3 +51,5 @@ STORAGES = {
 }
 
 WHITENOISE_MANIFEST_STRICT = False
+
+ALLOWED_HOSTS = ['online-banking-p6mb.onrender.com']
