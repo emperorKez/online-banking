@@ -1,8 +1,8 @@
 import os
 
-env = os.environ.get('DJANGO_ENV', 'production')
+env = os.environ.get('DJANGO_ENV', 'dev')
 
 if env == 'production':
     from .prod import *
 else:
-    from .prod import *
+    from .dev import *
